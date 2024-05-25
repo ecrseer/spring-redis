@@ -1,9 +1,9 @@
 package br.gj.tp3.gjustinotp3.aluno;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.gj.tp3.gjustinotp3.curso.Curso;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Aluno {
@@ -15,13 +15,25 @@ public class Aluno {
     private int idade;
 
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(name = "aluno_e_curso", joinColumns = @JoinColumn(name = "aluno_id"),
+            inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    private List<Curso> cursos;
+
+
     public Aluno(String nome, int idade) {
         this.nome = nome;
         this.idade = idade;
     }
 
-    public Aluno() {
+    public Aluno() {    }
 
+    public List<Curso> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
     }
 
     public String getNome() {
